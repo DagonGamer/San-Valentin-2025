@@ -1,0 +1,41 @@
+body {
+    margin: 0px;
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-image: url(src/Fondo.png);
+    background-repeat: repeat;
+}
+
+img.Corazon {
+    height: 15vh;
+    position: fixed;
+    z-index: 100;
+}
+
+img.Chincheta {
+    height: 7.5vh;
+    position: fixed;
+    z-index: 101;
+}
+
+img.Mensaje {
+    height: 20vh;
+    position: fixed;
+    z-index: 101;
+    animation: infinite linear alternate 1s parpadeo;
+}
+
+@keyframes parpadeo {
+    
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
+}

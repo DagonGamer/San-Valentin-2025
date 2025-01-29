@@ -1,0 +1,9 @@
+{
+    "liveServer.settings.root": "/",
+    "liveServer.settings.https": {
+      "enable": true,
+      "cert": "C:/Users/usuario/Desktop/Código/San Valentin 2025/localhost.pem",
+      "key": "C:/Users/usuario/Desktop/Código/San Valentin 2025/localhost.key",
+      "passphrase": "GabrielaTeQuiero"
+    }
+  }
