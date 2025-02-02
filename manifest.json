@@ -6,8 +6,8 @@
         "src": "/src/Corazon-Comprimido.ico"
       }
     ],
-    "start_url": "/San-Valentin-2025/",
-    "display": "standalone",
+    "start_url": "/",
+    "display": "fullscreen",
     "theme_color": "#000000",
     "background_color": "#ffffff",
     "orientation": "landscape"
