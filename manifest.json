@@ -3,9 +3,7 @@
     "name": "San Valentín",
     "icons": [
       {
-        "src": "/src/Corazon Comprimido.png",
-        "sizes": "250x250",
-        "type": "image/png"
+        "src": "/src/Corazon-Comprimido.ico"
       }
     ],
     "start_url": "/",
