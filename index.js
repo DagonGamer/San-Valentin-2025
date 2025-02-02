@@ -5,12 +5,19 @@ let Flecha = document.querySelector("img.Flecha");
 let Fondo = document.querySelector("div.Fondo");
 let body = document.querySelector("body");
 let p = document.querySelector("p");
+let canvas = document.querySelector("canvas");
+canvas.width = body.offsetWidth;
+canvas.height = body.offsetHeight;
+let ctx = canvas.getContext("2d");
+ctx.fillStyle = "green";
+ctx.strokeStyle = "red";
 
 const vel = body.offsetHeight / 2.5;
 const fps = 60;
 
 let game = {
     Inmortal: false,
+    colisiones: false,
     xPos: 0,
     yPos: 0,
     maxXPos: 0,
@@ -148,10 +155,20 @@ setInterval(() => {
     for (let bala of game.Balas)
         bala.movimiento(bala.bala, bala);
 
+    // Dibuja en el canvas
+    if (game.colisiones) {
+        ctx.clearRect(0, 0, body.offsetWidth, body.offsetHeight);
+        for (let bala of game.Balas)
+            ctx.fillRect(bala.x - 2, bala.y - 2, 5, 5);
+        ctx.beginPath();
+        ctx.ellipse(game.xPos, game.yPos, Corazon.offsetWidth / 4, Corazon.offsetHeight / 4, 0, 0, 2 * Math.PI);
+        ctx.stroke();
+    }
+
     // Comprueba colisiones
     if (!game.Inmortal)
         for (let bala of game.Balas)
-            if (distancia(bala.x, bala.y, game.xPos, game.yPos) < Corazon.offsetHeight / 2) {
+            if (distancia(bala.x, bala.y, game.xPos, game.yPos) < Corazon.offsetHeight / 4) {
                 game.Pausa = true;
                 game.Balas = [];
                 Corazon.style.zIndex = 50;
@@ -163,7 +180,6 @@ setInterval(() => {
                 let Azar = Math.floor(Math.random() * Finales.length);
                 document.querySelector("div.Mensajes p.A").innerText = Finales[Azar][0];
                 document.querySelector("div.Mensajes p.B").innerText = Finales[Azar][1];
-                document.querySelector("div.Mensajes button").innerText = Finales[Azar][2];
                 document.querySelector("div.Mensajes").style.opacity = 1;
                 setTimeout(() => document.querySelector("div.Mensajes button").style.opacity = 1, 3000);
             }
@@ -173,7 +189,12 @@ setInterval(() => {
 // Funciones de movimiento de flecha
 
 let Lineal = (img, bala) => {
+        
+    let inf = img.getBoundingClientRect();
+
     if (!bala.animada) {
+        bala.antCentroX = inf.x;
+        bala.antCentroY = inf.y;
         setTimeout(() =>  {
             bala.parteX = Math.cos((360 - bala.ang) * Math.PI / 180)/fps;
             bala.parteY = Math.sin((360 - bala.ang) * Math.PI / 180)/fps;
@@ -190,9 +211,11 @@ let Lineal = (img, bala) => {
         }, Math.floor(1000/fps) - 3);
         bala.animada = true;
     }
-        
-	bala.x += vel*(bala.parteX || 0);
-	bala.y += vel*(bala.parteY || 0);
+    bala.x += inf.x - bala.antCentroX;
+    bala.y += inf.y - bala.antCentroY;
+    bala.antCentroX = inf.x;
+    bala.antCentroY = inf.y;
+    
 }
 
 // Funciones generadoras de flechas
