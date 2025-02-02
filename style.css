@@ -46,6 +46,8 @@ div.Mensajes button {
 	border: white solid 0.25vh;
 	border-radius: 1vh;
 	box-shadow: 0.5vh 0.5vh 1vh #222b;
+    transition: all 1s;
+    opacity: 0;
 }
 
 img.Flecha {

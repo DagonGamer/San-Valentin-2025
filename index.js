@@ -77,6 +77,8 @@ Iniciable = () => {
 
 let generarBala = (x, y, ang, movimiento) => {
 
+    if (game.Pausa) return;
+
     let bala = document.createElement("img");
     bala.src = "src/Flecha Comprimida.png";
     bala.className = "Flecha";
@@ -163,6 +165,7 @@ setInterval(() => {
                 document.querySelector("div.Mensajes p.B").innerText = Finales[Azar][1];
                 document.querySelector("div.Mensajes button").innerText = Finales[Azar][2];
                 document.querySelector("div.Mensajes").style.opacity = 1;
+                setTimeout(() => document.querySelector("div.Mensajes button").style.opacity = 1, 3000);
             }
 
 }, Math.floor(1000/fps));
@@ -194,31 +197,89 @@ let Lineal = (img, bala) => {
 
 // Funciones generadoras de flechas
 
-let Escalera = (pos = 1, centro = body.offsetHeight / 2) => {
-    let cont;
-    if (pos == 1) // Vertical
-        cont = Math.floor(Math.max(centro - Corazon.offsetHeight * 7 / 8, body.offsetHeight - centro - Corazon.offsetHeight * 7 / 8) / Flecha.offsetHeight);
-    else cont = Math.floor(Math.max(centro - Corazon.offsetWidth * 7 / 8, body.offsetWidth - centro - Corazon.offsetWidth * 7 / 8) / Flecha.offsetHeight);
-    EscaleraAux(pos, cont, centro);
+let Sola = (pos = 1, centro = 0.5, suma = 0) => {
+
+    switch (pos) {
+
+        case 0: // Vertical por arriba
+            generarBala(body.offsetWidth*centro + suma, 0, 270, Lineal);
+            break;
+
+        case 1: // Horizontal por la derecha
+            generarBala(body.offsetWidth, centro*body.offsetHeight + suma, 180, Lineal);
+            break;
+
+        case 2: // Vertical por abajo
+            generarBala(body.offsetWidth*centro + suma, body.offsetHeight, 90, Lineal);
+            break;
+
+        case 3: // Horizontal por la izquierda
+            generarBala(0, centro*body.offsetHeight + suma, 0, Lineal);
+            break;
+    }
+
 }
 
-let EscaleraAux = (pos, cont, centro, i = 0) => {
-    if (pos == 1) // Vertical
-        if (i % 2 == 0) {
-            generarBala(0, centro - Corazon.offsetHeight * 7 / 8 - Flecha.offsetHeight*(cont-i), 0, Lineal);
-            generarBala(0, centro + Corazon.offsetHeight * 7 / 8 + Flecha.offsetHeight*(cont-i), 0, Lineal);
-        } else {
-            generarBala(body.offsetWidth, centro + Corazon.offsetHeight * 7 / 8 + Flecha.offsetHeight*(cont-i), 180, Lineal);
-            generarBala(body.offsetWidth, centro - Corazon.offsetHeight * 7 / 8 - Flecha.offsetHeight*(cont-i), 180, Lineal);
-        }
-    else if (i % 2 == 0) { // Horizontal
+let Flechita = (pos = 1, centro = 0.5, escalones = 5) => {
+
+    Sola(pos, centro);
+
+    setTimeout(FlechitaAux, 100, pos, centro, escalones - 1);
+
+}
+
+let FlechitaAux = (pos, centro, escalones, i = 1) => {
+
+    Sola(pos, centro, Flecha.offsetHeight * i);
+    Sola(pos, centro, -Flecha.offsetHeight * i);
+    if (i < escalones) setTimeout(FlechitaAux, 100, pos, centro, escalones, i+1)
+
+}
+
+let FlechitaSinCentro = (pos = 1, centro = 0.5, escalones = 6, escalonesOmitidos = 3) =>
+    FlechitaAux(pos, centro, escalones, escalonesOmitidos);
+
+let Escalera = (pos = 0, centro = 0.5, alternar = true) => {
+    let cont;
+    if (pos == 0 || pos == 2) { // Vertical
+        centro = body.offsetWidth * centro;
+        cont = Math.floor(Math.max(centro - Corazon.offsetHeight * 7 / 8, body.offsetWidth - centro - Corazon.offsetHeight * 7 / 8) / Flecha.offsetHeight);
+    } else { // Horizontal
+        centro = body.offsetHeight * centro;
+        cont = Math.floor(Math.max(centro - Corazon.offsetWidth * 7 / 8, body.offsetHeight - centro - Corazon.offsetWidth * 7 / 8) / Flecha.offsetHeight);
+    }
+    EscaleraAux(pos, cont, centro, alternar);
+}
+
+let EscaleraAux = (pos, cont, centro, alternar, i = 0) => {
+    
+    let lado = pos + (alternar ? 2 : 0) * (i % 2);
+
+    switch (lado % 4) {
+
+        case 0:
             generarBala(centro - Corazon.offsetWidth * 7 / 8 - Flecha.offsetHeight*(cont-i), 0, 270, Lineal);
             generarBala(centro + Corazon.offsetWidth * 7 / 8 + Flecha.offsetHeight*(cont-i), 0, 270, Lineal);
-        } else {
+            break;
+
+        case 1: 
+            generarBala(body.offsetWidth, centro + Corazon.offsetHeight * 7 / 8 + Flecha.offsetHeight*(cont-i), 180, Lineal);
+            generarBala(body.offsetWidth, centro - Corazon.offsetHeight * 7 / 8 - Flecha.offsetHeight*(cont-i), 180, Lineal);
+            break;
+
+        case 2:
             generarBala(centro + Corazon.offsetWidth * 7 / 8 + Flecha.offsetHeight*(cont-i), body.offsetHeight, 90, Lineal);
             generarBala(centro - Corazon.offsetWidth * 7 / 8 - Flecha.offsetHeight*(cont-i), body.offsetHeight, 90, Lineal);
-        }
-    if ( i < cont ) setTimeout(EscaleraAux, 100, pos, cont, centro, i + 1);
+            break;
+
+        case 3:
+            generarBala(0, centro - Corazon.offsetHeight * 7 / 8 - Flecha.offsetHeight*(cont-i), 0, Lineal);
+            generarBala(0, centro + Corazon.offsetHeight * 7 / 8 + Flecha.offsetHeight*(cont-i), 0, Lineal);
+            break;
+
+    }
+
+    if ( i < cont ) setTimeout(EscaleraAux, 100, pos, cont, centro, alternar, i + 1);
 }
 
 let Bloques = (pos = 1) => {
@@ -233,7 +294,10 @@ let Bloques = (pos = 1) => {
     }
 }
 
-let Octogono = (centroX = body.offsetWidth/2, centroY = body.offsetHeight/2, apotema = Corazon.offsetHeight * 7 / 8) => {
+let Octogono = (centroX = 0.5, centroY = 0.5, apotema =  7 / 8) => {
+    centroX *= body.offsetWidth;
+    centroY *= body.offsetHeight;
+    apotema *= Corazon.offsetHeight;
     let distanciaAparicion = Math.max(distancia(centroX, centroY, 0, 0), distancia(centroX, centroY, body.offsetWidth, 0), distancia(centroX, centroY, body.offsetWidth, body.offsetHeight), distancia(centroX, centroY, 0, body.offsetHeight))
     generarBala(centroX + 0.41421 * apotema - distanciaAparicion, centroY - apotema, 0, Lineal);
     generarBala(centroX + apotema - 0.7071 * distanciaAparicion, centroY - 0.41421 * apotema - 0.7071 * distanciaAparicion, 315, Lineal);
@@ -243,6 +307,21 @@ let Octogono = (centroX = body.offsetWidth/2, centroY = body.offsetHeight/2, apo
     generarBala(centroX - apotema + 0.7071 * distanciaAparicion, centroY + 0.41421 * apotema + 0.7071 * distanciaAparicion,135, Lineal)
     generarBala(centroX - apotema, centroY - 0.41421 * apotema + distanciaAparicion, 90, Lineal);
     generarBala(centroX - 0.41421 * apotema - 0.7071 * distanciaAparicion, centroY - apotema + 0.7071 * distanciaAparicion, 45, Lineal)
+}
+
+// Ganar
+
+let Ganar = () => {
+    Fondo.style.opacity = 1;
+    game.Pausa = true;
+    game.Balas = [];
+    Corazon.style.zIndex = 50;
+    Corazon.style.transition = "all 1s";
+    Fondo.style.opacity = 1;
+    Corazon.style.top = ( ( body.offsetHeight - Corazon.offsetHeight ) / 2 ) + "px";
+    Corazon.style.left = ( ( body.offsetWidth - Corazon.offsetWidth ) / 2 ) + "px";
+    Corazon.style.transform = "scale(2)";
+    document.querySelector("div.Ganado").style.opacity = 1;
 }
 
 // Funcion que sigue la programacion
@@ -255,12 +334,13 @@ let SiguienteProgramacion = (idx = 0) => {
 // Programación del juego
 
 let Programacion = [
-    [Escalera, 0],
-    [Octogono, 5000],
-    [Escalera, 0],
-    [Escalera, 0, 0, body.offsetWidth / 2],
-    [Octogono, 0, body.offsetWidth/2, body.offsetHeight/2, Corazon.offsetHeight*1.5],
-    [Escalera, 4000, 0, 0]
+    [Sola, 0], // Primera flecha dura
+    [Flechita, 5000], // Olita derecha
+    [Escalera, 3000, 1, 0.5, false], // Escalera derecha
+    [Escalera, 3000, 0, 0.35, false], // Escalera arriba
+    [Flechita, 4000, 1, 0.5, 6], // Punta de Flecha
+    [FlechitaSinCentro, 2000, 1, 0.5, 15, 3],
+    [Ganar, 7000]
 ]
 
 let Finales = [
@@ -282,6 +362,7 @@ document.querySelector("div.Mensajes button").onclick = () => {
     document.querySelector("div.Mensajes").style.opacity = 0;
     Mensaje.style.animation = "infinite linear alternate 1s parpadeo";
     Mensaje.style.opacity = 1;
+    document.querySelector("div.Mensajes button").style.opacity = 0;
     Chincheta.style.opacity = 1;
     setTimeout(() => body.addEventListener("click", Iniciable), 500);
 }
