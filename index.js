@@ -151,7 +151,7 @@ setInterval(() => {
     // Comprueba colisiones
     if (!game.Inmortal)
         for (let bala of game.Balas)
-            if (distancia(bala.x, bala.y, game.xPos, game.yPos) < Corazon.offsetHeight / 4) {
+            if (distancia(bala.x, bala.y, game.xPos, game.yPos) < Corazon.offsetHeight / 2) {
                 game.Pausa = true;
                 game.Balas = [];
                 Corazon.style.zIndex = 50;
@@ -340,16 +340,20 @@ let Programacion = [
     [Escalera, 3000, 0, 0.35, false], // Escalera arriba
     [Flechita, 4000, 1, 0.5, 6], // Punta de Flecha
     [FlechitaSinCentro, 2000, 1, 0.5, 15, 3],
-    [Ganar, 7000]
+    [Escalera, 1000, 1, 0.75, false], // Parte interesante
+    [Escalera, 2000, 1, 0.5, false],
+    [Escalera, 1000, 1, 0.25, false],
+    [Escalera, 2000, 1, 0.75, false],
+    [Ganar, 10000]
 ]
 
 let Finales = [
-    ["Te enamoraste de Alex...", "¿Cómo pudiste enamorarte de Alex? Lo veía difícil, pero parece que ha sido así...", "No quiero a Alex, para nada, voy a superarlo"],
-    ["Te enamoraste de Fran...", "¿Cómo pudiste enamorarte de Fran? Te meterá una puñala' si se entera...", "Que asco Fran, voy a superarlo"],
-    ["Te enamoraste de tu padre...", "¿Cómo pudiste enamorarte de tu padre? Es tu pu** padre, psicópata.", "No me gusta mi pae de esa forma, voy a superarlo"],
-    ["Te enamoraste de Paco...", "¿Cómo pudiste enamorarte de un coche? Es caro y hay que mantenerlo.", "No me gustan los coches, y menos el tuyo, voy a superarlo"],
-    ["Te enamoraste de Bullejos...", "¿Cómo pudiste enamorarte de Bullejos? Él era mío... :(", "No me gusta Bullejos, voy a superarlo"],
-    ["Te enamoraste de una manzana...", "¿Cómo pu-, normal, siendo vegetariana... Aunque seguro que te la comes entera.", "No me quiero enamorar de una manzana, voy a superarla"]
+    ["Te enamoraste de Alex...", "¿Cómo pudiste enamorarte de Alex? Lo veía difícil, pero parece que ha sido así..."],
+    ["Te enamoraste de Fran...", "¿Cómo pudiste enamorarte de Fran? Te meterá una puñala' si se entera..."],
+    ["Te enamoraste de tu padre...", "¿Cómo pudiste enamorarte de tu padre? Es tu pu** padre, psicópata."],
+    ["Te enamoraste de Paco...", "¿Cómo pudiste enamorarte de un coche? Es caro y hay que mantenerlo."],
+    ["Te enamoraste de Bullejos...", "¿Cómo pudiste enamorarte de Bullejos? Él era mío... :("],
+    ["Te enamoraste de una manzana...", "¿Cómo pu-, normal, siendo vegetariana... Aunque seguro que te la comes entera."]
 ]
 
 // Reinicio del juego
@@ -390,8 +394,3 @@ acl.addEventListener("reading", () => {
         game.yVel = -acl.y / 15 * body.offsetHeight / 30;
     }
 });
-
-body.ontouchmove = e => {
-    game.xPos = e.touches[0].clientX;
-    game.yPos = e.touches[0].clientY;
-}
