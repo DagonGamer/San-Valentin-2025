@@ -327,6 +327,7 @@ let Ganar = () => {
 // Funcion que sigue la programacion
 
 let SiguienteProgramacion = (idx = 0) => {
+    if (game.Pausa) return;
     Programacion[idx][0](...Programacion[idx].slice(2));
     if (Programacion[idx+1]) setTimeout(SiguienteProgramacion, Programacion[idx+1][1], idx+1);
 }
