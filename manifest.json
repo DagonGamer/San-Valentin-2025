@@ -3,12 +3,12 @@
     "name": "San Valentín",
     "icons": [
       {
-        "src": "/src/Corazon-Comprimido.ico"
+        "src": "/src/Icono.png",
+        "sizes": "100x100"
       }
     ],
-    "start_url": "https://dagongamer.github.io/San-Valentin-2025/",
     "display": "fullscreen",
-    "theme_color": "#000000",
+    "theme_color": "#ffffff",
     "background_color": "#ffffff",
     "orientation": "landscape"
   }
