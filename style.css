@@ -33,6 +33,21 @@ p.Mensaje {
     z-index: 11;
 }
 
+div.Mensajes button {
+	position: fixed;
+	width: 75vh;
+	height: 6vh;
+	top: 90vh;
+	left: calc(50vw - 37.5vh);
+	font-size: 2vh;
+	font-family: Knewave;
+	background: #555b;
+	color: white;
+	border: white solid 0.25vh;
+	border-radius: 1vh;
+	box-shadow: 0.5vh 0.5vh 1vh #222b;
+}
+
 img.Flecha {
     height: 5vh;
     position: fixed;

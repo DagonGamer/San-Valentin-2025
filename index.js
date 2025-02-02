@@ -6,7 +6,8 @@ let Fondo = document.querySelector("div.Fondo");
 let body = document.querySelector("body");
 let p = document.querySelector("p");
 
-const vel = body.offsetHeight / 50;
+const vel = body.offsetHeight / 2.5;
+const fps = 60;
 
 let game = {
     Inmortal: false,
@@ -56,21 +57,21 @@ setTimeout( () => {
     game.xPos = (game.maxXPos + game.minXPos) / 2;
     game.yPos = (game.maxYPos + game.minYPos) / 2;
 
-    body.onclick = () => {
-        Mensaje.style.animation = "";
-        Mensaje.style.opacity = 0;
-        Chincheta.remove();
-        game.Pausa = false;
-        SiguienteProgramacion();
-
-        body.onclick = () => {};
-        body.ontouchmove = e => {
-            game.xPos = e.touches[0].clientX;
-            game.yPos = e.touches[0].clientY;
-        }
-    }
+    body.addEventListener("click", Iniciable);
 
 }, 100);
+
+// Empezar partida
+
+Iniciable = () => {
+    Mensaje.style.animation = "";
+    Mensaje.style.opacity = 0;
+    Chincheta.style.opacity = 0;
+    game.Pausa = false;
+    SiguienteProgramacion();
+
+    body.removeEventListener("click", Iniciable);
+}
 
 // Función que genera balas
 
@@ -101,7 +102,7 @@ let generarBala = (x, y, ang, movimiento) => {
     bala.style.transform = "rotate(" + (360-ang) + "deg)";
 
     game.Balas.push({
-        x, y, ang, movimiento, bala, centroX, centroY, cont: 50
+        x, y, ang, movimiento, bala, centroX, centroY, animada: false
     });
 
 }
@@ -110,23 +111,20 @@ let generarBala = (x, y, ang, movimiento) => {
 
 window.addEventListener("deviceorientation", e => {
 
-    if (body.offsetHeight > body.offsetWidth) {
-        game.xVel = Math.round(e.gamma) / 90 * body.offsetHeight / 30;
-        game.yVel = Math.round(e.beta) / 90 * body.offsetHeight / 30;
-    } else {
-        game.xVel = Math.round(e.beta) / 90 * body.offsetHeight / 30;
-        game.yVel = Math.round(-e.gamma) / 90 * body.offsetHeight / 30;
-    }
+    if (e.alpha != null)
+        if (body.offsetHeight > body.offsetWidth) {
+            game.xVel = Math.round(e.gamma) / 90 * body.offsetHeight / 30;
+            game.yVel = Math.round(e.beta) / 90 * body.offsetHeight / 30;
+        } else {
+            game.xVel = Math.round(e.beta) / 90 * body.offsetHeight / 30;
+            game.yVel = Math.round(-e.gamma) / 90 * body.offsetHeight / 30;
+        }
+    else acl.start();
 
     p.innerText = `
         Alfa: ${e.alpha}
         Beta: ${e.beta}
         Gamma: ${e.gamma}
-        Pausa: ${game.Pausa}
-        xVel: ${game.xVel}
-        yVel: ${game.yVel}
-        xPos: ${game.xPos}
-        yPos: ${game.yPos}
     `
 
 }, true);
@@ -153,38 +151,45 @@ setInterval(() => {
         for (let bala of game.Balas)
             if (distancia(bala.x, bala.y, game.xPos, game.yPos) < Corazon.offsetHeight / 4) {
                 game.Pausa = true;
+                game.Balas = [];
                 Corazon.style.zIndex = 50;
                 Corazon.style.transition = "all 1s";
-                setTimeout(() => {
-                    Fondo.style.opacity = 1;
-                    Corazon.style.top = ( ( body.offsetHeight - Corazon.offsetHeight ) / 2 ) + "px";
-                    Corazon.style.left = ( ( body.offsetWidth - Corazon.offsetWidth ) / 2 ) + "px";
-                    Corazon.style.transform = "scale(2)";
-                    document.querySelector("div.Mensajes").style.opacity = 1;
-                }, 1000);
+                Fondo.style.opacity = 1;
+                Corazon.style.top = ( ( body.offsetHeight - Corazon.offsetHeight ) / 2 ) + "px";
+                Corazon.style.left = ( ( body.offsetWidth - Corazon.offsetWidth ) / 2 ) + "px";
+                Corazon.style.transform = "scale(2)";
+                let Azar = Math.floor(Math.random() * Finales.length);
+                document.querySelector("div.Mensajes p.A").innerText = Finales[Azar][0];
+                document.querySelector("div.Mensajes p.B").innerText = Finales[Azar][1];
+                document.querySelector("div.Mensajes button").innerText = Finales[Azar][2];
+                document.querySelector("div.Mensajes").style.opacity = 1;
             }
 
-}, 40);
+}, Math.floor(1000/fps));
 
 // Funciones de movimiento de flecha
 
 let Lineal = (img, bala) => {
-	bala.x += vel*Math.cos((360 - bala.ang) * Math.PI / 180);
-	bala.centroX += vel*Math.cos((360 - bala.ang) * Math.PI / 180);
-	bala.y += vel*Math.sin((360 - bala.ang) * Math.PI / 180);
-	bala.centroY += vel*Math.sin((360 - bala.ang) * Math.PI / 180);
-	img.style.left = bala.centroX + "px";
-	img.style.top = bala.centroY + "px";
-    bala.cont--;
-
-    if (bala.cont < 0)
-        if (bala.centroX > body.offsetWidth + Flecha.offsetWidth ||
-            bala.centroX < -Flecha.offsetWidth*2 ||
-            bala.centroY > body.offsetHeight + Flecha.offsetWidth ||
-            bala.centroY < -Flecha.offsetWidth*2) {
+    if (!bala.animada) {
+        setTimeout(() =>  {
+            bala.parteX = Math.cos((360 - bala.ang) * Math.PI / 180)/fps;
+            bala.parteY = Math.sin((360 - bala.ang) * Math.PI / 180)/fps;
+            bala.centroX += vel*Math.cos((360 - bala.ang) * Math.PI / 180)*15;
+            bala.centroY += vel*Math.sin((360 - bala.ang) * Math.PI / 180)*15;
+            img.style.transition = "all 15s linear";
+            img.style.left = bala.centroX + "px";
+            img.style.top = bala.centroY + "px";
+    
+            setTimeout(() => {
                 img.remove();
                 game.Balas = game.Balas.filter(el => el != bala);
-        }
+            }, 15000);
+        }, Math.floor(1000/fps) - 3);
+        bala.animada = true;
+    }
+        
+	bala.x += vel*(bala.parteX || 0);
+	bala.y += vel*(bala.parteY || 0);
 }
 
 // Funciones generadoras de flechas
@@ -251,15 +256,61 @@ let SiguienteProgramacion = (idx = 0) => {
 
 let Programacion = [
     [Escalera, 0],
-    [Escalera, 5000, 0, body.offsetWidth / 2],
-    [Escalera, 5000, 1, game.minXPos],
-    [Escalera, 5000, 0, game.minXPos],
-    [Bloques, 5000],
-    [Bloques, 5000, 0],
-    [Octogono, 5000]
+    [Octogono, 5000],
+    [Escalera, 0],
+    [Escalera, 0, 0, body.offsetWidth / 2],
+    [Octogono, 0, body.offsetWidth/2, body.offsetHeight/2, Corazon.offsetHeight*1.5],
+    [Escalera, 4000, 0, 0]
 ]
+
+let Finales = [
+    ["Te enamoraste de Alex...", "¿Cómo pudiste enamorarte de Alex? Lo veía difícil, pero parece que ha sido así...", "No quiero a Alex, para nada, voy a superarlo"],
+    ["Te enamoraste de Fran...", "¿Cómo pudiste enamorarte de Fran? Te meterá una puñala' si se entera...", "Que asco Fran, voy a superarlo"],
+    ["Te enamoraste de tu padre...", "¿Cómo pudiste enamorarte de tu padre? Es tu pu** padre, psicópata.", "No me gusta mi pae de esa forma, voy a superarlo"],
+    ["Te enamoraste de Paco...", "¿Cómo pudiste enamorarte de un coche? Es caro y hay que mantenerlo.", "No me gustan los coches, y menos el tuyo, voy a superarlo"],
+    ["Te enamoraste de Bullejos...", "¿Cómo pudiste enamorarte de Bullejos? Él era mío... :(", "No me gusta Bullejos, voy a superarlo"],
+    ["Te enamoraste de una manzana...", "¿Cómo pu-, normal, siendo vegetariana... Aunque seguro que te la comes entera.", "No me quiero enamorar de una manzana, voy a superarla"]
+]
+
+// Reinicio del juego
+
+document.querySelector("div.Mensajes button").onclick = () => {
+    Corazon.style.zIndex = 10;
+    Corazon.style.transition = "";
+    Fondo.style.opacity = 0;
+    Corazon.style.transform = "";
+    document.querySelector("div.Mensajes").style.opacity = 0;
+    Mensaje.style.animation = "infinite linear alternate 1s parpadeo";
+    Mensaje.style.opacity = 1;
+    Chincheta.style.opacity = 1;
+    setTimeout(() => body.addEventListener("click", Iniciable), 500);
+}
 
 // Funciones auxiliares
 
 let distancia = (x1, y1, x2, y2) => 
     Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
+
+// Acelerómetro en caso de no tener Giroscopio
+
+const acl = new Accelerometer({ frequency: 10 });
+acl.addEventListener("reading", () => {
+    p.innerText = `
+        X: ${acl.x}
+        Y: ${acl.y}
+        Z: ${acl.z}
+    `;
+
+    if (body.offsetHeight < body.offsetWidth) {
+        game.xVel = -acl.y / 15 * body.offsetHeight / 30;
+        game.yVel = -acl.x / 15 * body.offsetHeight / 30;
+    } else {
+        game.xVel = acl.x / 15 * body.offsetHeight / 30;
+        game.yVel = -acl.y / 15 * body.offsetHeight / 30;
+    }
+});
+
+body.ontouchmove = e => {
+    game.xPos = e.touches[0].clientX;
+    game.yPos = e.touches[0].clientY;
+}
