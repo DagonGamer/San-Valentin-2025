@@ -14,6 +14,7 @@ ctx.strokeStyle = "red";
 
 const vel = body.offsetHeight / 2.5;
 const fps = 60;
+const radioColision = Corazon.offsetWidth * 3 / 8;
 
 let game = {
     Inmortal: false,
@@ -161,14 +162,14 @@ setInterval(() => {
         for (let bala of game.Balas)
             ctx.fillRect(bala.x - 2, bala.y - 2, 5, 5);
         ctx.beginPath();
-        ctx.ellipse(game.xPos, game.yPos, Corazon.offsetWidth / 4, Corazon.offsetHeight / 4, 0, 0, 2 * Math.PI);
+        ctx.ellipse(game.xPos, game.yPos, radioColision, radioColision, 0, 0, 2 * Math.PI);
         ctx.stroke();
     }
 
     // Comprueba colisiones
     if (!game.Inmortal)
         for (let bala of game.Balas)
-            if (distancia(bala.x, bala.y, game.xPos, game.yPos) < Corazon.offsetHeight / 4) {
+            if (distancia(bala.x, bala.y, game.xPos, game.yPos) < radioColision) {
                 game.Pausa = true;
                 game.Balas = [];
                 Corazon.style.zIndex = 50;
