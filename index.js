@@ -263,6 +263,37 @@ let FlechitaAux = (pos, centro, escalones, i = 1) => {
 let FlechitaSinCentro = (pos = 1, centro = 0.5, escalones = 6, escalonesOmitidos = 3) =>
     FlechitaAux(pos, centro, escalones, escalonesOmitidos);
 
+let Muro = (pos = 1, centro = 0.5, ancho = 3) => {
+
+    let cont;
+    if (pos == 0 || pos == 2) { // Vertical
+        let centroParsed = body.offsetWidth * centro;
+        cont = Math.floor(Math.max(centroParsed, body.offsetWidth - centroParsed) / Flecha.offsetHeight);
+    } else { // Horizontal
+        let centroParsed = body.offsetHeight * centro;
+        cont = Math.floor(Math.max(centroParsed, body.offsetHeight - centroParsed) / Flecha.offsetHeight);
+    }
+
+    for (let i = ancho; i <= cont + 1; i++) {
+        Sola(pos, centro, Flecha.offsetHeight * i);
+        Sola(pos, centro, -Flecha.offsetHeight * i);
+    }
+}
+
+let MuroDoble = (posX = 0, posY = 0, centroX = 0.5, centroY = 0.5) => {
+    // posX = 0 por arriba, = 1 por abajo
+    // posY = 0 por la derecha, = 1 por la izquierda
+
+    let tiempoX = (posY == 0 ? (1 - centroX) * body.offsetWidth : centroX * body.offsetWidth) / vel;
+    let tiempoY = (posX == 0 ? centroY * body.offsetHeight : (1 - centroY) * body.offsetHeight) / vel;
+    let minimo = Math.min(tiempoX, tiempoY);
+    tiempoX -= minimo;
+    tiempoY -= minimo;
+
+    setTimeout(Muro, Math.floor(tiempoY * 1000), posY * 2 + 1, centroY);
+    setTimeout(Muro, Math.floor(tiempoX * 1000), posX * 2, centroX);
+}
+
 let Escalera = (pos = 0, centro = 0.5, alternar = true) => {
     let cont;
     if (pos == 0 || pos == 2) { // Vertical
@@ -318,19 +349,28 @@ let Bloques = (pos = 1) => {
     }
 }
 
-let Octogono = (centroX = 0.5, centroY = 0.5, apotema =  7 / 8) => {
+let Circulo = (centroX = 0.5, centroY = 0.5, balas = 10, radio = 7 / 8, anguloRedundante = 0) => {
     centroX *= body.offsetWidth;
     centroY *= body.offsetHeight;
-    apotema *= Corazon.offsetHeight;
-    let distanciaAparicion = Math.max(distancia(centroX, centroY, 0, 0), distancia(centroX, centroY, body.offsetWidth, 0), distancia(centroX, centroY, body.offsetWidth, body.offsetHeight), distancia(centroX, centroY, 0, body.offsetHeight))
-    generarBala(centroX + 0.41421 * apotema - distanciaAparicion, centroY - apotema, 0, Lineal);
-    generarBala(centroX + apotema - 0.7071 * distanciaAparicion, centroY - 0.41421 * apotema - 0.7071 * distanciaAparicion, 315, Lineal);
-    generarBala(centroX + apotema, centroY + 0.41421 * apotema - distanciaAparicion, 270, Lineal);
-    generarBala(centroX + 0.41421 * apotema + 0.7071 * distanciaAparicion, centroY + apotema - 0.7071 * distanciaAparicion, 225, Lineal);
-    generarBala(centroX - 0.41421 * apotema + distanciaAparicion, centroY + apotema, 180, Lineal);
-    generarBala(centroX - apotema + 0.7071 * distanciaAparicion, centroY + 0.41421 * apotema + 0.7071 * distanciaAparicion,135, Lineal)
-    generarBala(centroX - apotema, centroY - 0.41421 * apotema + distanciaAparicion, 90, Lineal);
-    generarBala(centroX - 0.41421 * apotema - 0.7071 * distanciaAparicion, centroY - apotema + 0.7071 * distanciaAparicion, 45, Lineal)
+
+    let distanciaAparicion = Math.max(distancia(centroX, centroY, 0, 0),
+                                distancia(centroX, centroY, body.offsetWidth, 0),
+                                distancia(centroX, centroY, body.offsetWidth, body.offsetHeight),
+                                distancia(centroX, centroY, 0, body.offsetHeight));
+    
+    for (let i = 0; i < balas; i++) {
+        let ang = 360 / balas * i + anguloRedundante;
+        let rad = ang * Math.PI / 180;
+        let x = centroX;
+        let y = centroY;
+        x += Math.cos(-rad)*distanciaAparicion;
+        y += Math.sin(-rad)*distanciaAparicion;
+        x += Math.cos(-rad+Math.PI/2)*radio*Corazon.offsetHeight;
+        y += Math.sin(-rad+Math.PI/2)*radio*Corazon.offsetHeight;
+
+        generarBala(x, y, (ang + 180) % 360, Lineal);
+    }
+
 }
 
 // Ganar
@@ -365,10 +405,16 @@ let Programacion = [
     [Escalera, 3000, 0, 0.35, false], // Escalera arriba
     [Flechita, 4000, 1, 0.5, 6], // Punta de Flecha
     [FlechitaSinCentro, 2000, 1, 0.5, 15, 3],
-    [Escalera, 1000, 1, 0.75, false], // Parte interesante
+    [Escalera, 1000, 1, 0.75, false], // Parte interesante de escaleras
     [Escalera, 2000, 1, 0.5, false],
     [Escalera, 1000, 1, 0.25, false],
     [Escalera, 2000, 1, 0.75, false],
+    [Muro, 6000, 0, 0.5], // Parte interesante de muros verticales
+    [Muro, 1500, 0, 0.75],
+    [Muro, 1500, 0, 0.25],
+    [MuroDoble, 1500],
+    [Circulo, 3500, 0.5, 0.5, 15, 1, 0],
+    [Circulo, 0, 0.5, 0.5, 15, -1, 0]
     [Ganar, 10000]
 ]
 
