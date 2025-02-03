@@ -18,7 +18,7 @@ const radioColision = Corazon.offsetWidth * 3 / 8;
 
 let game = {
     Inmortal: false,
-    colisiones: false,
+    colisiones: true,
     xPos: 0,
     yPos: 0,
     maxXPos: 0,
