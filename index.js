@@ -84,6 +84,7 @@ setTimeout( () => {
 
 Iniciable = () => {
     testDeviceOrientation();
+    body.requestFullscreen();
     Mensaje.style.animation = "";
     Mensaje.style.opacity = 0;
     Chincheta.style.opacity = 0;
