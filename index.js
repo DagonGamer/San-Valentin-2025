@@ -36,9 +36,9 @@ let game = {
 const testDeviceOrientation = () => {
     if (typeof DeviceOrientationEvent !== 'function')
         document.querySelector("p.Version").innerText = 'DeviceOrientationEvent not detected';
-    if (typeof DeviceOrientationEvent.requestPermission !== 'function')
+    else if (typeof DeviceOrientationEvent.requestPermission !== 'function')
         document.querySelector("p.Version").innerText = 'DeviceOrientationEvent.requestPermission not detected';
-    DeviceOrientationEvent.requestPermission()
+    else DeviceOrientationEvent.requestPermission()
         .then(result => document.querySelector("p.Version").innerText = result);
 }
 
