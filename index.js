@@ -31,6 +31,18 @@ let game = {
     Balas: []
 }
 
+// Mierda de iOS
+
+const testDeviceOrientation = () => {
+    if (typeof DeviceOrientationEvent !== 'function')
+        document.querySelector("p.Version").innerText = 'DeviceOrientationEvent not detected';
+    if (typeof DeviceOrientationEvent.requestPermission !== 'function')
+        document.querySelector("p.Version").innerText = 'DeviceOrientationEvent.requestPermission not detected';
+    DeviceOrientationEvent.requestPermission()
+        .then(result => document.querySelector("p.Version").innerText = result);
+}
+testDeviceOrientation();
+
 // Centra las imágenes del principio
 
 Corazon.onload = () => {
