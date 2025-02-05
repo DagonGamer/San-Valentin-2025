@@ -41,7 +41,6 @@ const testDeviceOrientation = () => {
     DeviceOrientationEvent.requestPermission()
         .then(result => document.querySelector("p.Version").innerText = result);
 }
-testDeviceOrientation();
 
 // Centra las imágenes del principio
 
@@ -84,6 +83,7 @@ setTimeout( () => {
 // Empezar partida
 
 Iniciable = () => {
+    testDeviceOrientation();
     Mensaje.style.animation = "";
     Mensaje.style.opacity = 0;
     Chincheta.style.opacity = 0;
