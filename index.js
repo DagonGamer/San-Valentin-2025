@@ -15,6 +15,8 @@ ctx.strokeStyle = "red";
 const vel = body.offsetHeight / 2.5;
 const fps = 60;
 const radioColision = Corazon.offsetWidth * 3 / 8;
+const infoEncriptada = "_.n.ÖgçÖ:çnVçn6,.qqçJXçq;UÖDçn5.ne,5çJngç;ò.6:q.Jn6,Ve.6:q.=X/:çqç|,çJnÏ.V5ç5nò.q.ÖÖ.=XÎn:EJn;.nq.gÁ.q5ç6nçnVçn6,.qqç=XnnnnXÎnVçn6,.qqçJX,VÁ;,Öç5çnòUqn.6.n6UV=Xv.6çV:çn6ÁnÏ.VV.rçJXVçnWçg.n5.6VÁ;Ïqçq=X*q.6ngU;Un.6.n6UVJX5.n:q.;.Ö5çn,ÖgçÖ5.6g.Ög,çJXòçqçn;,ne,5çn,q,5,6g.Ög,ç=XsçÁ6çn.Ön;,n6,.qqçnçV.ñq.nVÁ;,Ö,6g.Ög,ç=XXÂqÁ:Un5.Vn6UVnÜnVçn6,.qqçn.6n;,neUrJXg¿V,5çn5.nòç5q.JX;.V,ÓVÁçn5.n;ç5q.=XÎn;,neUrJXÉÁ.nV.n6UÖqD.nçn:Á6ngÁ;òV,5U6JXÉÁ.n;.nq.gÁ.q5çnçn:D=XXRUÜn6,.Ö:Unçñqç5.g,5UJXçVn6UVnòUqn5.Íçq;.ne.q:.JXçnVçn6,.qqçnçòçg,ñÁçq;.JXçn;,neUrnòçqçnòU5.qn5.g,q:.XÉÁ.nWç6ngçÁ6ç5Un.Ön;DnÁÖçn,Ö;çqg.6,ÏV.nV,;.q.Ög,ç=X";
+let desbloquearInfo = key => Descodificar(infoEncriptada, key);
 
 let game = {
     Inmortal: false,
@@ -36,9 +38,9 @@ let game = {
 const testDeviceOrientation = () => {
     if (typeof DeviceOrientationEvent !== 'function')
         document.querySelector("p.Version").innerText = 'DeviceOrientationEvent not detected';
-    if (typeof DeviceOrientationEvent.requestPermission !== 'function')
+    else if (typeof DeviceOrientationEvent.requestPermission !== 'function')
         document.querySelector("p.Version").innerText = 'DeviceOrientationEvent.requestPermission not detected';
-    DeviceOrientationEvent.requestPermission()
+    else DeviceOrientationEvent.requestPermission()
         .then(result => document.querySelector("p.Version").innerText = result);
 }
 
