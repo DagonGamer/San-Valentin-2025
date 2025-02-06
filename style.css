@@ -7,27 +7,30 @@ body {
     left: 0px;
     background-image: url(src/Fondo.png);
     background-repeat: repeat;
+
+    --VW: 1vw;
+    --VH: 1vh;
 }
 
 img.Corazon {
-    height: 15%;
+    height: calc(15 * var(--VH));
     position: fixed;
     z-index: 10;
 }
 
 img.Chincheta {
-    height: 7.5%;
+    height: calc(7.5 * var(--VH));
     position: fixed;
     z-index: 11;
 }
 
 p.Mensaje {
     position: fixed;
-    font-size: 5vh;
+    font-size: calc(5 * var(--VH));
     color: white;
     text-align: center;
     font-family: Knewave;
-    top: 70vh;
+    top: calc(70 * var(--VH));
     margin: 0px;
     width: 100%;
     z-index: 11;
@@ -35,24 +38,24 @@ p.Mensaje {
 
 div.Mensajes button {
 	position: fixed;
-	width: 75vh;
-	height: 6vh;
-	top: 90vh;
-	left: calc(50vw - 37.5vh);
-	font-size: 2vh;
+	width: calc(75 * var(--VH));
+	height: calc(6 * var(--VH));
+	top: calc(90 * var(--VH));
+	left: calc(50 * var(--VW) - 37.5 * var(--VH));
+	font-size: calc(2 * var(--VH));
 	font-family: Knewave;
 	background: #555b;
 	color: white;
-	border: white solid 0.25vh;
-	border-radius: 1vh;
-	box-shadow: 0.5vh 0.5vh 1vh #222b;
+	border: white solid calc(0.25 * var(--VH));
+	border-radius: var(--VH);
+	box-shadow: calc(0.5 * var(--VH)) calc(0.5 * var(--VH)) calc(1 * var(--VH)) #222b;
     transition: all 1s;
     opacity: 0;
 }
 
 canvas {
-    width: 100%;
-    height: 100vh;
+    width: calc(100 * var(--VW));
+    height: calc(100 * var(--VH));
     background: transparent;
     position: fixed;
     top: 0px;
@@ -62,9 +65,9 @@ canvas {
 }
 
 img.Flecha {
-    height: 5vh;
+    height: calc(5 * var(--VH));
     position: fixed;
-    top: -5vh;
+    top: calc(-5 * var(--VH));
     z-index: 20;
 }
 
@@ -73,8 +76,8 @@ div.Fondo {
     position: fixed;
     top: 0px;
     left: 0px;
-    width: 100%;
-    height: 100vh;
+    width: calc(100 * var(--VW));
+    height: calc(100 * var(--VH));
     opacity: 0;
     transition: all 1s;
     background: #00000080;
