@@ -10,13 +10,13 @@ body {
 }
 
 img.Corazon {
-    height: 15vh;
+    height: 15%;
     position: fixed;
     z-index: 10;
 }
 
 img.Chincheta {
-    height: 7.5vh;
+    height: 7.5%;
     position: fixed;
     z-index: 11;
 }

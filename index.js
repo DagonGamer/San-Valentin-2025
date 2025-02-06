@@ -12,15 +12,15 @@ let ctx = canvas.getContext("2d");
 ctx.fillStyle = "green";
 ctx.strokeStyle = "red";
 
-const vel = body.offsetHeight / 2.5;
+let vel = body.offsetHeight / 2.5;
 const fps = 60;
-const radioColision = Corazon.offsetWidth * 3 / 8;
+let radioColision = Corazon.offsetWidth * 3 / 8;
 const infoEncriptada = "_.n.ÖgçÖ:çnVçn6,.qqçJXçq;UÖDçn5.ne,5çJngç;ò.6:q.Jn6,Ve.6:q.=X/:çqç|,çJnÏ.V5ç5nò.q.ÖÖ.=XÎn:EJn;.nq.gÁ.q5ç6nçnVçn6,.qqç=XnnnnXÎnVçn6,.qqçJX,VÁ;,Öç5çnòUqn.6.n6UV=Xv.6çV:çn6ÁnÏ.VV.rçJXVçnWçg.n5.6VÁ;Ïqçq=X*q.6ngU;Un.6.n6UVJX5.n:q.;.Ö5çn,ÖgçÖ5.6g.Ög,çJXòçqçn;,ne,5çn,q,5,6g.Ög,ç=XsçÁ6çn.Ön;,n6,.qqçnçV.ñq.nVÁ;,Ö,6g.Ög,ç=XXÂqÁ:Un5.Vn6UVnÜnVçn6,.qqçn.6n;,neUrJXg¿V,5çn5.nòç5q.JX;.V,ÓVÁçn5.n;ç5q.=XÎn;,neUrJXÉÁ.nV.n6UÖqD.nçn:Á6ngÁ;òV,5U6JXÉÁ.n;.nq.gÁ.q5çnçn:D=XXRUÜn6,.Ö:Unçñqç5.g,5UJXçVn6UVnòUqn5.Íçq;.ne.q:.JXçnVçn6,.qqçnçòçg,ñÁçq;.JXçn;,neUrnòçqçnòU5.qn5.g,q:.XÉÁ.nWç6ngçÁ6ç5Un.Ön;DnÁÖçn,Ö;çqg.6,ÏV.nV,;.q.Ög,ç=X";
 let desbloquearInfo = key => Descodificar(infoEncriptada, key);
 
 let game = {
     Inmortal: false,
-    colisiones: true,
+    colisiones: false,
     xPos: 0,
     yPos: 0,
     maxXPos: 0,
@@ -33,13 +33,65 @@ let game = {
     Balas: []
 }
 
+// Resicea la página
+
+let Resizar = () => {
+    body.style.height = window.innerHeight + "px";
+    body.style.width = window.innerWidth + "px";
+
+    game.Pausa = true;
+    game.Balas = [];
+    Corazon.style.zIndex = 10;
+    Corazon.style.transition = "";
+    Fondo.style.opacity = 0;
+    Corazon.style.transform = "";
+    document.querySelector("div.Mensajes").style.opacity = 0;
+    Mensaje.style.animation = "infinite linear alternate 1s parpadeo";
+    Mensaje.style.opacity = 1;
+    document.querySelector("div.Mensajes button").style.opacity = 0;
+    Chincheta.style.opacity = 1;
+    setTimeout(() => {
+        vel = body.offsetHeight / 2.5;
+        radioColision = Corazon.offsetWidth * 3 / 8;
+        game.maxXPos = body.offsetWidth - Corazon.offsetWidth / 2;
+        game.maxYPos = body.offsetHeight - Corazon.offsetHeight / 2;
+        game.minXPos = Corazon.offsetWidth / 2;
+        game.minYPos = Corazon.offsetHeight / 2;
+        game.xPos = game.maxXPos / 2;
+        game.yPos = game.maxYPos / 2;
+        
+        canvas.width = body.offsetWidth;
+        canvas.height = body.offsetHeight;
+        canvas.style.width = body.offsetWidth + "px";
+        canvas.style.height = body.offsetHeight + "px";
+        ctx = canvas.getContext("2d");
+        ctx.fillStyle = "green";
+        ctx.strokeStyle = "red";
+        body.addEventListener("click", Iniciable)
+    }, 100);
+
+    Corazon.style.top = ( ( body.offsetHeight - Corazon.offsetHeight ) / 2 ) + "px";
+    Corazon.style.left = ( ( body.offsetWidth - Corazon.offsetWidth ) / 2 ) + "px";
+    
+    Chincheta.style.top = ( ( body.offsetHeight - Chincheta.offsetHeight ) / 2 - body.offsetHeight / 30 ) + "px";
+    Chincheta.style.left = ( ( body.offsetWidth - Chincheta.offsetWidth ) / 2 + body.offsetWidth / 60 ) + "px";
+}
+
+window.addEventListener("resize", Resizar);
+
+// Da privilegios
+
+localStorage.Privilegiado = "true";
+if (localStorage && localStorage.Privilegiado == "true")
+    document.querySelector("p.Version").innerText += '\nDado como privilegiado';
+
 // Mierda de iOS
 
 const testDeviceOrientation = () => {
     if (typeof DeviceOrientationEvent !== 'function')
-        document.querySelector("p.Version").innerText = 'DeviceOrientationEvent not detected';
+        document.querySelector("p.Version").innerText += '\nDeviceOrientationEvent not detected';
     else if (typeof DeviceOrientationEvent.requestPermission !== 'function')
-        document.querySelector("p.Version").innerText = 'DeviceOrientationEvent.requestPermission not detected';
+        document.querySelector("p.Version").innerText += '\nDeviceOrientationEvent.requestPermission not detected';
     else DeviceOrientationEvent.requestPermission()
         .then(result => document.querySelector("p.Version").innerText = result);
 }
@@ -63,24 +115,7 @@ Chincheta.onload = () => {
 
 // Recentra las imágenes del principio
 
-setTimeout( () => {
-
-    Corazon.style.top = ( ( body.offsetHeight - Corazon.offsetHeight ) / 2 ) + "px";
-    Corazon.style.left = ( ( body.offsetWidth - Corazon.offsetWidth ) / 2 ) + "px";
-
-    Chincheta.style.top = ( ( body.offsetHeight - Chincheta.offsetHeight ) / 2 - body.offsetHeight / 30 ) + "px";
-    Chincheta.style.left = ( ( body.offsetWidth - Chincheta.offsetWidth ) / 2 + body.offsetWidth / 60 ) + "px";
-
-    game.maxXPos = body.offsetWidth - Corazon.offsetWidth / 2;
-    game.maxYPos = body.offsetHeight - Corazon.offsetHeight / 2;
-    game.minXPos = Corazon.offsetWidth / 2;
-    game.minYPos = Corazon.offsetHeight / 2;
-    game.xPos = (game.maxXPos + game.minXPos) / 2;
-    game.yPos = (game.maxYPos + game.minYPos) / 2;
-
-    body.addEventListener("click", Iniciable);
-
-}, 100);
+setTimeout(Resizar, 10);
 
 // Empezar partida
 
