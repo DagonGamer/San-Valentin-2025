@@ -19,7 +19,7 @@ const infoEncriptada = "_.n.ÖgçÖ:çnVçn6,.qqçJXçq;UÖDçn5.ne,5çJngç;ò.
 let desbloquearInfo = key => Descodificar(infoEncriptada, key);
 
 let game = {
-    Inmortal: false,
+    Inmortal: true,
     colisiones: false,
     xPos: 0,
     yPos: 0,
@@ -118,6 +118,7 @@ Chincheta.onload = () => {
 // Recentra las imágenes del principio
 
 setTimeout(Resizar, 10);
+setTimeout(() => alert("Antes de jugar, recuerda poner la tablet en horizontal. El corazón se mueve moviendo la tablet. Disfruta!!!"), 200);
 
 // Empezar partida
 
@@ -437,6 +438,10 @@ let Ganar = () => {
     Corazon.style.left = ( ( body.offsetWidth - Corazon.offsetWidth ) / 2 ) + "px";
     Corazon.style.transform = "scale(2)";
     document.querySelector("div.Ganado").style.opacity = 1;
+    setTimeout(() => {
+        let key = prompt("Para ver un bonito poema escribe la contraseña:");
+        alert(desbloquearInfo(key));
+    }, 1500);
 }
 
 // Funcion que sigue la programacion
@@ -461,12 +466,12 @@ let Programacion = [
     [Escalera, 1000, 1, 0.25, false],
     [Escalera, 2000, 1, 0.75, false],
     [Muro, 6000, 0, 0.5], // Parte interesante de muros verticales
-    [Muro, 1500, 0, 0.75],
-    [Muro, 1500, 0, 0.25],
+    [Muro, 1500, 0, 0.625],
+    [Muro, 1500, 0, 0.375],
     [MuroDoble, 1500],
     [Circulo, 3500, 0.5, 0.5, 15, 1, 0],
-    [Circulo, 0, 0.5, 0.5, 15, -1, 0]
-    [Ganar, 10000]
+    [Circulo, 0, 0.5, 0.5, 15, -1, 0],
+    [Ganar, 7000]
 ]
 
 let Finales = [
