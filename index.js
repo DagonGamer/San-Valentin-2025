@@ -38,6 +38,8 @@ let game = {
 let Resizar = () => {
     body.style.height = window.innerHeight + "px";
     body.style.width = window.innerWidth + "px";
+    body.style.setProperty("--VH", (window.innerHeight / 100) + "px");
+    body.style.setProperty("--VW", (window.innerWidth / 100) + "px");
 
     game.Pausa = true;
     game.Balas = [];
