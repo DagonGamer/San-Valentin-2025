@@ -19,7 +19,7 @@ const infoEncriptada = "_.n.ÖgçÖ:çnVçn6,.qqçJXçq;UÖDçn5.ne,5çJngç;ò.
 let desbloquearInfo = key => Descodificar(infoEncriptada, key);
 
 let game = {
-    Inmortal: true,
+    Inmortal: false,
     colisiones: false,
     xPos: 0,
     yPos: 0,
