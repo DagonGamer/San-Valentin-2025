@@ -83,9 +83,9 @@ window.addEventListener("resize", Resizar);
 
 // Da privilegios
 
-localStorage.Privilegiado = "true";
-if (localStorage && localStorage.Privilegiado == "true")
-    document.querySelector("p.Version").innerText += '\nDado como privilegiado';
+// localStorage.Privilegiado = "true";
+// if (localStorage && localStorage.Privilegiado == "true")
+//     document.querySelector("p.Version").innerText += '\nDado como privilegiado';
 
 // Mierda de iOS
 
@@ -118,7 +118,13 @@ Chincheta.onload = () => {
 // Recentra las imágenes del principio
 
 setTimeout(Resizar, 10);
-setTimeout(() => alert("Antes de jugar, recuerda poner la tablet en horizontal. El corazón se mueve moviendo la tablet. Disfruta!!!"), 200);
+setTimeout(() => {
+    if (localStorage.Privilegiado) {
+        document.querySelector("div.Escondite").remove();
+        alert("Antes de jugar, recuerda poner la tablet en horizontal. El corazón se mueve moviendo la tablet. Disfruta!!!");
+    }
+    else alert("Hasta el día 14 de Febrero no podrás ver el detalle que he tenido. Sé paciente!!!");
+}, 200);
 
 // Empezar partida
 
