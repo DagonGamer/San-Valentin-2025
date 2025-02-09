@@ -15,8 +15,21 @@ ctx.strokeStyle = "red";
 let vel = body.offsetHeight / 2.5;
 const fps = 60;
 let radioColision = Corazon.offsetWidth * 3 / 8;
-const infoEncriptada = "_.n.ÖgçÖ:çnVçn6,.qqçJXçq;UÖDçn5.ne,5çJngç;ò.6:q.Jn6,Ve.6:q.=X/:çqç|,çJnÏ.V5ç5nò.q.ÖÖ.=XÎn:EJn;.nq.gÁ.q5ç6nçnVçn6,.qqç=XnnnnXÎnVçn6,.qqçJX,VÁ;,Öç5çnòUqn.6.n6UV=Xv.6çV:çn6ÁnÏ.VV.rçJXVçnWçg.n5.6VÁ;Ïqçq=X*q.6ngU;Un.6.n6UVJX5.n:q.;.Ö5çn,ÖgçÖ5.6g.Ög,çJXòçqçn;,ne,5çn,q,5,6g.Ög,ç=XsçÁ6çn.Ön;,n6,.qqçnçV.ñq.nVÁ;,Ö,6g.Ög,ç=XXÂqÁ:Un5.Vn6UVnÜnVçn6,.qqçn.6n;,neUrJXg¿V,5çn5.nòç5q.JX;.V,ÓVÁçn5.n;ç5q.=XÎn;,neUrJXÉÁ.nV.n6UÖqD.nçn:Á6ngÁ;òV,5U6JXÉÁ.n;.nq.gÁ.q5çnçn:D=XXRUÜn6,.Ö:Unçñqç5.g,5UJXçVn6UVnòUqn5.Íçq;.ne.q:.JXçnVçn6,.qqçnçòçg,ñÁçq;.JXçn;,neUrnòçqçnòU5.qn5.g,q:.XÉÁ.nWç6ngçÁ6ç5Un.Ön;DnÁÖçn,Ö;çqg.6,ÏV.nV,;.q.Ög,ç=X";
-let desbloquearInfo = key => Descodificar(infoEncriptada, key);
+const infoEncriptada = [
+    "Î*P_.n.ÖgçÖ:çnVçn6,.qqçJXçq;UÖDçn5.ne,5çJngç;ò.6:q.Jn6,Ve.6:q.=X/:çqç|,çJnÏ.V5ç5nò.q.ÖÖ.=XÎn:EJn;.nq.gÁ.q5ç6nçnVçn6,.qqç=XnnnnXÎnVçn6,.qqçJX,VÁ;,Öç5çnòUqn.6.n6UV=Xv.6çV:çn6ÁnÏ.VV.rçJXVçnWçg.n5.6VÁ;Ïqçq=X*q.6ngU;Un.6.n6UVJX5.n:q.;.Ö5çn,ÖgçÖ5.6g.Ög,çJXòçqçn;,ne,5çn,q,5,6g.Ög,ç=XsçÁ6çn.Ön;,n6,.qqçnçV.ñq.nVÁ;,Ö,6g.Ög,ç=XXÂqÁ:Un5.Vn6UVnÜnVçn6,.qqçn.6n;,neUrJXg¿V,5çn5.nòç5q.JX;.V,ÓVÁçn5.n;ç5q.=XÎn;,neUrJXÉÁ.nV.n6UÖqD.nçn:Á6ngÁ;òV,5U6JXÉÁ.n;.nq.gÁ.q5çnçn:D=XXRUÜn6,.Ö:Unçñqç5.g,5UJXçVn6UVnòUqn5.Íçq;.ne.q:.JXçnVçn6,.qqçnçòçg,ñÁçq;.JXçn;,neUrnòçqçnòU5.qn5.g,q:.XÉÁ.nWç6ngçÁ6ç5Un.Ön;DnÁÖçn,Ö;çqg.6,ÏV.nV,;.q.Ög,ç=X",
+    "PręøÍÓmíeÓnqqâí6ÍíñnígñmçgWmZmíVUnínÖpÍíWÍípníÓÍínÖon;mZmÖí5m5m5m5âíon;ÍímVU(ípgnWnÖípUíonVUn,ÍíÚnpmÓÓní5n5n5nbËdníVUn;(míÚnìg;íVUnípníVUgn;ÍíñUìÏÍÍâín;nÖínÓíñn5Í;;í5n5n5nâíÖgnño;nínÖpCÖíÚgÖoUnÖpÍímím6UÚm;ñníìÍWíìUmÓVUgn;íìÍÖmíìÍWí/mZ;gnÓmí6íWÍíÖJíVUJí6íWÍíÖJíìUCWpÍí5m5m5m5bíuÍ;íÖgíWÍíÖníWÍpmíñníìmnÖíñU6íZgnWâín;nÖíñU6íñm5Íâí6íì;nÍíVUnín;nÖíUWmíç;mWíon;ÖÍWmí5n5n5nâíÚníÓmíVUníoÍÚnñÍÖínÖpm;íÍ;çUÓÓÍÖÍÖíÚnío;nÖnWìgm;í5n5n5nbíeÖ(íVUníoÍ;ípÍÚÍínÖpÍínÖpÍ6íñU6ímç;mÚnìgÚÍíÚníp(âíoÍ;íñUìÏmÖíìÍÖmÖâíoÍ;íÓÍíÚní/mZ;gnÓmâíoÍ;íÚn5m;ñníìÍWXgm;íìgnçmñnWpnínWíp(âíoÍ;ím6UÚm;ñnínWíçnWn;mÓâíoÍ;ímÓnç;m;ñníÓÍÖíÚ(mÖâíoÍ;ío;nÍìUom;pníoÍ;íñ(âí6íoUnÖípÍÚÍínÖÍbíeÖ(íVUníoÍ;íñUìÏmÖíìÍÖmÖí6íñUìÏÍíìÍÖmÖâípníÚnÖnÍíÓÍíñn5Í;âíVUníomÖnÖíUWíç;mWíÚ(míÚníęmWí-mÓnWp(WâíVUnípníVUgn;ÍíñUìÏÍâí6íVUnín;nÖínÓíñn5Í;bí8WíXUn;pnímZ;m:ÍíÚníom;pníÚnípUímñgçUnpníÜmògÚí5n5n5nb"
+];
+let desbloquearInfo = key => {
+
+    for (const info of infoEncriptada) {
+        let posibleInfo = Descodificar(info, key);
+        if (posibleInfo[0] == "Y" && posibleInfo[1] == "E" && posibleInfo[2] == "S")
+            return posibleInfo.slice(3);
+    }
+
+    return "Contraseña Incorrecta";
+
+};
 
 let game = {
     Inmortal: false,
@@ -446,7 +459,10 @@ let Ganar = () => {
     document.querySelector("div.Ganado").style.opacity = 1;
     setTimeout(() => {
         let key = prompt("Para ver un bonito poema escribe la contraseña:");
-        alert(desbloquearInfo(key));
+        let texto = desbloquearInfo(key);
+        document.querySelector("div.Final").style.opacity = 1;
+        document.querySelector("div.Final").style.pointerEvents = "all";
+        document.querySelector("div.Final p").innerText = texto;
     }, 1500);
 }
 

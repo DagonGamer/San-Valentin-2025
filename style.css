@@ -84,6 +84,27 @@ div.Fondo {
     backdrop-filter: blur(5px);
 }
 
+div.Final {
+    background: white;
+    position: fixed;
+    padding: 5rem;
+    width: calc(100% - 10rem);
+    height: calc(100vh - 10rem);
+    top: 0px;
+    left: 0px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999999;
+    overflow: auto;
+}
+
+div.Final p {
+    margin: 0px;
+    font-size: 1rem;
+    font-family: Arial;
+    text-align: justify;
+}
+
 @keyframes parpadeo {
     
     0% {
