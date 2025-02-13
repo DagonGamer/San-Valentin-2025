@@ -4,7 +4,6 @@ let Mensaje = document.querySelector("body > p.Mensaje");
 let Flecha = document.querySelector("img.Flecha");
 let Fondo = document.querySelector("div.Fondo");
 let body = document.querySelector("body");
-let p = document.querySelector("p");
 let canvas = document.querySelector("canvas");
 canvas.width = body.offsetWidth;
 canvas.height = body.offsetHeight;
@@ -103,12 +102,10 @@ window.addEventListener("resize", Resizar);
 // Mierda de iOS
 
 const testDeviceOrientation = () => {
-    if (typeof DeviceOrientationEvent !== 'function')
-        document.querySelector("p.Version").innerText += '\nDeviceOrientationEvent not detected';
-    else if (typeof DeviceOrientationEvent.requestPermission !== 'function')
-        document.querySelector("p.Version").innerText += '\nDeviceOrientationEvent.requestPermission not detected';
+    if (typeof DeviceOrientationEvent !== 'function') let a = 0;
+    else if (typeof DeviceOrientationEvent.requestPermission !== 'function') let a = 0;
     else DeviceOrientationEvent.requestPermission()
-        .then(result => document.querySelector("p.Version").innerText = result);
+        .then(result => {return;});
 }
 
 // Centra las imágenes del principio
@@ -201,12 +198,6 @@ window.addEventListener("deviceorientation", e => {
             game.yVel = Math.round(-e.gamma) / 90 * body.offsetHeight / 30;
         }
     else acl.start();
-
-    p.innerText = `
-        Alfa: ${e.alpha}
-        Beta: ${e.beta}
-        Gamma: ${e.gamma}
-    `
 
 }, true);
 
@@ -529,11 +520,6 @@ let distancia = (x1, y1, x2, y2) =>
 
 const acl = new Accelerometer({ frequency: 10 });
 acl.addEventListener("reading", () => {
-    p.innerText = `
-        X: ${acl.x}
-        Y: ${acl.y}
-        Z: ${acl.z}
-    `;
 
     if (body.offsetHeight < body.offsetWidth) {
         game.xVel = -acl.y / 15 * body.offsetHeight / 30;
