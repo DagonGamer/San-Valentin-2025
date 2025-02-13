@@ -102,8 +102,8 @@ window.addEventListener("resize", Resizar);
 // Mierda de iOS
 
 const testDeviceOrientation = () => {
-    if (typeof DeviceOrientationEvent !== 'function') let a = 0;
-    else if (typeof DeviceOrientationEvent.requestPermission !== 'function') let a = 0;
+    if (typeof DeviceOrientationEvent !== 'function') return;
+    else if (typeof DeviceOrientationEvent.requestPermission !== 'function') return;
     else DeviceOrientationEvent.requestPermission()
         .then(result => {return;});
 }
@@ -129,7 +129,7 @@ Chincheta.onload = () => {
 
 setTimeout(Resizar, 10);
 setTimeout(() => {
-    if (localStorage.Privilegiado) {
+    if (true) {
         document.querySelector("div.Escondite").remove();
         alert("Antes de jugar, recuerda poner la tablet en horizontal. El corazón se mueve moviendo la tablet. Disfruta!!!");
     }
